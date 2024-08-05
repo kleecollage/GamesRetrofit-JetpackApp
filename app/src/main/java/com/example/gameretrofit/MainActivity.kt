@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.example.gameretrofit.navigation.NavManager
 import com.example.gameretrofit.ui.theme.GameRetrofitTheme
 import com.example.gameretrofit.viewModel.GamesViewModel
 import com.example.gameretrofit.views.HomeView
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GameRetrofitTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
-                    HomeView(viewModel)
+                    NavManager(viewModel)
                 }
             }
         }

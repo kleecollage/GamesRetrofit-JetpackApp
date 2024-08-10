@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import com.example.gameretrofit.data.GamesDataSource
 import com.example.gameretrofit.model.GameList
 import com.example.gameretrofit.repository.GamesRepository
 import com.example.gameretrofit.state.GameState
@@ -27,6 +31,10 @@ class GamesViewModel @Inject constructor(private val repo: GamesRepository): Vie
     init {
         fetchGames()
     }
+
+    val gamesPage = Pager(PagingConfig(pageSize = 5)) {
+        GamesDataSource(repo)
+    }.flow.cachedIn(viewModelScope)
 
     private fun fetchGames() {
         viewModelScope.launch {

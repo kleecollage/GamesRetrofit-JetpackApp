@@ -11,5 +11,5 @@ class Constants {
 }
 
 // 85e57d48d520446d8e44d33bcd2ca6b6
-
 // https://api.rawg.io/api/games/?key=85e57d48d520446d8e44d33bcd2ca6b6
+// https://api.rawg.io/api/games/1224?key=85e57d48d520446d8e44d33bcd2ca6b6&page=1&page_size=5

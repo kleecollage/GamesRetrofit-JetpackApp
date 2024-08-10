@@ -26,7 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.gameretrofit.components.CardGame
+import com.example.gameretrofit.components.Loader
 import com.example.gameretrofit.components.MainTopBar
 import com.example.gameretrofit.utils.Constants.Companion.CUSTOM_BLACK
 import com.example.gameretrofit.viewModel.GamesViewModel
@@ -46,7 +49,8 @@ fun HomeView(viewModel: GamesViewModel, navController: NavController) {
 
 @Composable
 fun ContentHomeView(viewModel: GamesViewModel, pad: PaddingValues, navController: NavController) {
-    val games by viewModel.games.collectAsState()
+    // val games by viewModel.games.collectAsState()
+    val gamesPage = viewModel.gamesPage.collectAsLazyPagingItems()
     var search by remember { mutableStateOf("") }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,19 +77,44 @@ fun ContentHomeView(viewModel: GamesViewModel, pad: PaddingValues, navController
         )
 
         LazyColumn(modifier = Modifier.background(Color(CUSTOM_BLACK))) {
-            items(games) { item ->
-                CardGame(game = item) {
-                    navController.navigate("DetailView/${item.id}/?$search")
+            items(gamesPage.itemCount) { index ->
+                val item = gamesPage[index]
+                if(item != null) {
+                    CardGame(game = item) {
+                        navController.navigate("DetailView/${item.id}/?$search")
+                    }
+                    Text(
+                        text = item.name,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.White,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                    )
                 }
-                Text(
-                    text = item.name,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color.White,
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                )
+            }
+            when(gamesPage.loadState.append) {
+                is LoadState.NotLoading -> Unit
+                LoadState.Loading -> {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillParentMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Loader()
+                        }
+                    }
+                }
+                is LoadState.Error -> {
+                    item {
+                        Text(text = "Error al cargar")
+                    }
+                }
             }
         }
+
+
     }
 }
 

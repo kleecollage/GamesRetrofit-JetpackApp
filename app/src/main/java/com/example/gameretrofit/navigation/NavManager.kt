@@ -19,13 +19,15 @@ fun NavManager(viewModel: GamesViewModel){
             HomeView(viewModel, navController)
         }
         composable(
-            "DetailView/{id}",
+            "DetailView/{id}/?{name}",
             arguments = listOf(
-            navArgument("id") { type = NavType.IntType }
+            navArgument("id") { type = NavType.IntType },
+            navArgument("name") { type = NavType.StringType }
             )
         ){
             val id = it.arguments?.getInt("id") ?: 0
-            DetailView(viewModel, navController, id)
+            val name = it.arguments?.getString("name") ?: ""
+            DetailView(viewModel, navController, id, name)
         }
         composable("SearchGameView") {
             SearchGameView(viewModel, navController)

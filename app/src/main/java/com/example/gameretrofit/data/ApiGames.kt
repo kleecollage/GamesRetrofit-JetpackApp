@@ -14,5 +14,10 @@ interface ApiGames {
 
     @GET("$END_POINT/{id}$API_KEY")
     suspend fun getGameById(@Path(value = "id")id: Int): Response<SingleGameModel>
+
+    @GET("$END_POINT/{name}$API_KEY")
+    suspend fun getGameByName(@Path(value = "name")name: String): Response<SingleGameModel>
+
+
 }
 
